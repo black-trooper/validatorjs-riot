@@ -8,3 +8,7 @@ deploy:
     tags: true
   api_key:
     secure: ImG5woyqPAJwOsB1TFnuO5xFhwdaqqvCX2X74Nm4En3tFp/R5Ti47jCaIw0DyUp6lvfXvXsY2KYRVdI7IyAsGQB60FelbTEOklh25SlPCXgTPS2B0U3k8ZIsLdNXCNbkzt48i55mCxE24aOSCD7NM+f89yn+i5CmVds0vQDkDmyCh2TT2BD2Q6DGGpSOmTsN6a7kWPmPRrq2YkUerpvx6ndkl1VOTnV3KmOhZE+4cqnrpHbN41WAGqp0AiQZ2ZL8fJeZZxtJz/NWEIWTuAqrFMSZM27BMNqhNLA1CiRe/o0bjKHS9uapwTy23SxRg/FQCDQZqhrXTDv4F+4x78+GxoFuDEjDgTJJQ89VjiM43KH+8T/FO+WxtjX9NsSrmcmG6OT/Yj2I3FGIISPc7+Jjo5bQHUJMTwFjyVaGCcXI4E7ZjxtV+w6R53kRaJ9gXHQR81o2vPz8ZyLfa0gF/QhM+qDWZLbnk1wX3UuRYXKbdhV7vlN5PJ/Td1T+Ng0GKPw2Emz1h/CE6dzAVJVNIR6svk/1OP8bjf93hlFdGava8HziX3hPgHkKVbASiTjAz1gY/hd9BmuEUmuV7kUQss0ZxQGEQXYzReXwzkkEPusl3ztYAjGZ6mtaP9w6FAEvtTlkFddZwSCqi58PbiMGNyhIQvarjBzf6CqNbhko41EffAg=
+before_install:
+  - export CHROME_BIN=chromium-browser
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
