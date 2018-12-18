@@ -104,4 +104,56 @@ describe('test', function () {
     v.errors.first('field3').should.equal('field3は3以上で入力してください。')
     v.errors.first('field4').should.equal('field4の値はパターンにマッチする必要があります。')
   })
+
+  it('custome attribute names', () => {
+    mount(`
+      <input type="text" ref="field1" ref-label="フィールド1" required />
+      <input type="number" ref="field2" max="3" value="10" />
+      <input type="number" ref="field3" min="3" value="2" />
+      <input type="text" ref="field4" pattern="regex:/^(?!0\\.00)\\d{1,3}(,\\d{3})*(\\.\\d\\d)?$/" value="10,000.001" />
+      `)
+    Validator.useLang('ja')
+    const v = new Validator(tag.refs)
+    v.fails().should.equal(true)
+    v.passes().should.equal(false)
+    v.errors.first('field1').should.equal('フィールド1は必須です。')
+    v.errors.first('field2').should.equal('field2は3以下で入力してください。')
+    v.errors.first('field3').should.equal('field3は3以上で入力してください。')
+    v.errors.first('field4').should.equal('field4の値はパターンにマッチする必要があります。')
+  })
+
+  it('option field name', () => {
+    mount(`
+      <input type="text" ref="field1" hoge="フィールド1" required />
+      <input type="number" ref="field2" max="3" value="10" />
+      <input type="number" ref="field3" min="3" value="2" />
+      <input type="text" ref="field4" pattern="regex:/^(?!0\\.00)\\d{1,3}(,\\d{3})*(\\.\\d\\d)?$/" value="10,000.001" />
+      `)
+    Validator.useLang('ja')
+    const v = new Validator(tag.refs, { field_name: 'hoge' })
+    v.fails().should.equal(true)
+    v.passes().should.equal(false)
+    v.errors.first('field1').should.equal('フィールド1は必須です。')
+    v.errors.first('field2').should.equal('field2は3以下で入力してください。')
+    v.errors.first('field3').should.equal('field3は3以上で入力してください。')
+    v.errors.first('field4').should.equal('field4の値はパターンにマッチする必要があります。')
+  })
+
+  it('setAttributeNames', () => {
+    mount(`
+      <input type="text" ref="field1" ref-label="フィールド1" required />
+      <input type="number" ref="field2" max="3" value="10" />
+      <input type="number" ref="field3" min="3" value="2" />
+      <input type="text" ref="field4" pattern="regex:/^(?!0\\.00)\\d{1,3}(,\\d{3})*(\\.\\d\\d)?$/" value="10,000.001" />
+      `)
+    Validator.useLang('ja')
+    const v = new Validator(tag.refs)
+    v.setAttributeNames({ field2: 'フィールド2' })
+    v.fails().should.equal(true)
+    v.passes().should.equal(false)
+    v.errors.first('field1').should.equal('field1は必須です。')
+    v.errors.first('field2').should.equal('フィールド2は3以下で入力してください。')
+    v.errors.first('field3').should.equal('field3は3以上で入力してください。')
+    v.errors.first('field4').should.equal('field4の値はパターンにマッチする必要があります。')
+  })
 })

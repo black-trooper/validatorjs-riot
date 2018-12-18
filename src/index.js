@@ -6,7 +6,9 @@ class ValidatorjsRiot extends Validator {
     const v = super({}, {})
     const data = {}
     const rules = {}
+    const attributeNames = {}
     this._option = option || {}
+    const fieldName = this._option.field_name || 'ref-label'
 
     for (const name in refs) {
       if (!refs.hasOwnProperty(name)) {
@@ -22,9 +24,13 @@ class ValidatorjsRiot extends Validator {
       }
       data[name] = this._prepareData(ref.value, attributes.type)
       rules[name] = this._prepareRule(attributes)
+      if (attributes[fieldName]) {
+        attributeNames[name] = attributes[fieldName].nodeValue
+      }
     }
     v.input = data
     v.rules = super._parseRules(rules)
+    v.setAttributeNames(attributeNames)
   }
 
   _prepareData(value, type) {
