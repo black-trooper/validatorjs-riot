@@ -7,11 +7,11 @@
     "dist"
   ],
   "scripts": {
-    "start": "npm run dev-watch & npm run test-watch",
+    "start": "npm run clean && npm run dev-watch & npm run test-watch",
     "dev": "webpack --mode development",
     "dev-watch": "webpack --mode development --watch --hot",
     "prod": "webpack --mode production",
-    "clean": "rimraf ./coverage",
+    "clean": "rimraf ./coverage && rimraf ./dist/*hot-update.*",
     "test": "npm run clean && karma start",
     "test-watch": "karma start --no-single-run",
     "build": "npm run test && npm run dev && npm run prod"
