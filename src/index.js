@@ -68,5 +68,9 @@ class ValidatorjsRiot extends Validator {
     }
     return true
   }
+
+  static useLang(lang) {
+    Validator.useLang(lang)
+  }
 }
 module.exports = ValidatorjsRiot
