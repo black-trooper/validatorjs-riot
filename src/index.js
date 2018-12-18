@@ -20,11 +20,21 @@ class ValidatorjsRiot extends Validator {
       if (!this._isTarget(name)) {
         continue
       }
-      data[name] = ref.value
+      data[name] = this._prepareData(ref.value, attributes.type)
       rules[name] = this._prepareRule(attributes)
     }
     v.input = data
     v.rules = super._parseRules(rules)
+  }
+
+  _prepareData(value, type) {
+    if (!value) {
+      return value
+    }
+    if (type && type.nodeValue == "number") {
+      return parseFloat(value)
+    }
+    return value
   }
 
   _prepareRule(attributes) {

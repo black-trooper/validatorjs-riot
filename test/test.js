@@ -1,4 +1,4 @@
-const Validator = require('../src/index');
+const Validator = require('../src/index')
 
 describe('test', function () {
   let tag
@@ -34,10 +34,10 @@ describe('test', function () {
     const v = new Validator(tag.refs)
     v.fails().should.equal(true)
     v.passes().should.equal(false)
-    expect(v.errors.first('field1')).to.be.not.null
-    expect(v.errors.first('field2')).to.be.not.null
-    expect(v.errors.first('field3')).to.be.not.null
-    expect(v.errors.first('field4')).to.be.not.null
+    v.errors.first('field1').should.equal('The field1 field is required.')
+    v.errors.first('field2').should.equal('The field2 may not be greater than 3.')
+    v.errors.first('field3').should.equal('The field3 must be at least 3.')
+    v.errors.first('field4').should.equal('The field4 format is invalid.')
   })
 
   it('target option', () => {
@@ -50,7 +50,7 @@ describe('test', function () {
     const v = new Validator(tag.refs, { target: ['field1'] })
     v.fails().should.equal(true)
     v.passes().should.equal(false)
-    expect(v.errors.first('field1')).to.be.not.null
+    v.errors.first('field1').should.equal('The field1 field is required.')
     v.errors.first('field2').should.equal(false)
     v.errors.first('field3').should.equal(false)
     v.errors.first('field4').should.equal(false)
@@ -67,9 +67,9 @@ describe('test', function () {
     v.fails().should.equal(true)
     v.passes().should.equal(false)
     v.errors.first('field1').should.equal(false)
-    expect(v.errors.first('field2')).to.be.not.null
-    expect(v.errors.first('field3')).to.be.not.null
-    expect(v.errors.first('field4')).to.be.not.null
+    v.errors.first('field2').should.equal('The field2 may not be greater than 3.')
+    v.errors.first('field3').should.equal('The field3 must be at least 3.')
+    v.errors.first('field4').should.equal('The field4 format is invalid.')
   })
 
   it('validate attribute', () => {
@@ -77,12 +77,14 @@ describe('test', function () {
       <input type="text" ref="field1" validate="required" />
       <input type="number" ref="field2" validate="max:3" value="10" />
       <input type="number" ref="field3" validate="min:3" value="2" />
+      <input type="text" ref="field4" pattern="regex:/^(?!0\\.00)\\d{1,3}(,\\d{3})*(\\.\\d\\d)?$/" value="10,000.001" />
       `)
     const v = new Validator(tag.refs)
     v.fails().should.equal(true)
     v.passes().should.equal(false)
-    expect(v.errors.first('field1')).to.be.not.null
-    expect(v.errors.first('field2')).to.be.not.null
-    expect(v.errors.first('field3')).to.be.not.null
+    v.errors.first('field1').should.equal('The field1 field is required.')
+    v.errors.first('field2').should.equal('The field2 may not be greater than 3.')
+    v.errors.first('field3').should.equal('The field3 must be at least 3.')
+    v.errors.first('field4').should.equal('The field4 format is invalid.')
   })
 })
