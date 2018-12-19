@@ -189,13 +189,13 @@ class ValidatorjsRiot extends Validator {
 
   _isTarget(ref) {
     const target = this._option.target || [];
-    const expect = this._option.expect || [];
+    const except = this._option.except || [];
 
     if (target.length > 0 && target.indexOf(ref) < 0) {
       return false;
     }
 
-    if (expect.length > 0 && expect.indexOf(ref) >= 0) {
+    if (except.length > 0 && except.indexOf(ref) >= 0) {
       return false;
     }
 

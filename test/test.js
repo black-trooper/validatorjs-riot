@@ -56,14 +56,14 @@ describe('test', function () {
     v.errors.first('field4').should.equal(false)
   })
 
-  it('expect option', () => {
+  it('except option', () => {
     mount(`
       <input type="text" ref="field1" required />
       <input type="number" ref="field2" max="3" value="10" />
       <input type="number" ref="field3" min="3" value="2" />
       <input type="text" ref="field4" pattern="/^[0-9]?$/" value="11" />
       `)
-    const v = new Validator(tag.refs, { expect: ['field1'] })
+    const v = new Validator(tag.refs, { except: ['field1'] })
     v.fails().should.equal(true)
     v.passes().should.equal(false)
     v.errors.first('field1').should.equal(false)
