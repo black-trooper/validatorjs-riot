@@ -74,7 +74,7 @@ describe('test', function () {
 
   it('validate attribute', () => {
     mount(`
-      <input type="text" ref="field1" validate="required" />
+      <input type="text" ref="field1" validate="required|email" />
       <input type="number" ref="field2" validate="max:3" value="10" />
       <input type="number" ref="field3" validate="min:3" value="2" />
       <input type="text" ref="field4" validate="regex:/^[0-9]?$/" value="11" />

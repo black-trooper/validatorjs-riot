@@ -46,7 +46,12 @@ class ValidatorjsRiot extends Validator {
   _prepareRule(attributes) {
     const rule = []
     if (attributes.validate && attributes.validate.nodeValue) {
-      rule.push(attributes.validate.nodeValue)
+      const value = attributes.validate.nodeValue
+      if (value.indexOf('|') >= 0) {
+        Array.prototype.push.apply(rule, value.split('|'))
+      } else {
+        rule.push(value)
+      }
     }
     if (attributes.required) {
       rule.push('required')
