@@ -1,6 +1,6 @@
 {
   "name": "validatorjs-riot",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Validatorjs for Riot",
   "main": "dist/validatorjs-riot.min.js",
   "files": [
