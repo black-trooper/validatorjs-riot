@@ -10,33 +10,21 @@
 
 ## Why use validatorjs-riot?
 
-* Not dependent on any libraries.
-* Works in both the browser and Node.
 * Readable and declarative validation rules.
 * Error messages with multilingual support.
 * AMD/Require.js and CommonJS/Browserify support.
 
 ## Installation
 
-Grab validatorjs-riot from Bower, NPM, or the /dist directory on Github:
-
-```
-bower install validatorjs-riot
-```
-
 ```
 npm install validatorjs-riot
 ```
 
-### Browser
-
-```html
-<script src="validatorjs-riot.js"></script>
-```
-
-### Node.js / Browserify
-
 ```js
+// using ES6 modules
+import Validator from 'validatorjs-riot';
+ 
+// using CommonJS modules
 let Validator = require('validatorjs-riot');
 ```
 
@@ -56,13 +44,17 @@ __options__ {Object} - Optional
 <input type="text" ref="name" validate="required" value="John" />
 <input type="text" ref="email" validate="required|email" value="johndoe@gmail.com" />
 <input type="number" ref="age" validate="min:18" value="28" />
-```
+<button type="button" onclick="{ validate }">validate</button>
 
-```js
+<script>
+let Validator = require('validatorjs-riot');
 let validation = new Validator(this.refs);
 
-validation.passes(); // true
-validation.fails(); // false
+validate(e) {
+  validation.passes(); // true
+  validation.fails(); // false
+}
+</script>
 ```
 
 To apply validation rules, set _ref_ and _validate_ attributes.
@@ -72,17 +64,21 @@ To apply validation rules, set _ref_ and _validate_ attributes.
 ```html
 <input type="text" ref="name" validate="size:3" value="D" />
 <input type="text" ref="email" validate="required|email" value="not an email address.com" />
-```
+<button type="button" onclick="{ validate }">validate</button>
 
-```js
+<script>
+let Validator = require('validatorjs-riot');
 let validation = new Validator(this.refs);
 
-validation.fails(); // true
-validation.passes(); // false
+validate(e) {
+  validation.fails(); // true
+  validation.passes(); // false
 
-// Error messages
-validation.errors.first('email'); // 'The email format is invalid.'
-validation.errors.get('email'); // returns an array of all email error messages
+  // Error messages
+  validation.errors.first('email'); // 'The email format is invalid.'
+  validation.errors.get('email'); // returns an array of all email error messages
+}
+</script>
 ```
 
 ### Available Rules
@@ -238,12 +234,6 @@ For each backward slash that you used in your regex pattern, you must escape eac
 <input type="text" ref="salary" validate="required" pattern="regex:/^(?!0.00)\\d\\{1,3\\}(,\\d\\{3\\})*(.\\d\\d)?$/" value="10,000.00" />
 <input type="text" ref="salary" validate="required" pattern="regex:/^(19|20)[\\d]\\{2,2\\}$/" value="1980" />
 ```
-```js
-let validation = new Validator(this.refs);
-
-validation.fails(); // false
-validation.passes(); // true
-```
 
 ### Error Messages
 
@@ -368,15 +358,7 @@ Note: by default all _ characters will be replaced with spaces.
 
 ### Language Support
 
-Error messages are in English by default. To include another language in the browser, reference the language file in a script tag and call `Validator.useLang('lang_code')`.
-
-```html
-<script src="dist/validator.js"></script>
-<script src="dist/lang/ru.js"></script>
-<script>
-  Validator.useLang('es');
-</script>
-```
+Error messages are in English by default. 
 
 In Node, it will automatically pickup on the language source files.
 
