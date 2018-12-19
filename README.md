@@ -262,7 +262,7 @@ returns true if error messages exist for an attribute, false otherwise
 the number of validation errors
 
 ```js
-let validation = new Validator(input, rules);
+let validation = new Validator(this.refs);
 validation.errors.first('email'); // returns first error message for email attribute
 validator.errors.get('email'); // returns an array of error messages for the email attribute
 ```
