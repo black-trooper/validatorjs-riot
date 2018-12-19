@@ -110,7 +110,9 @@ class ValidatorjsRiot extends Validator {
     const v = super({}, {});
     const data = {};
     const rules = {};
+    const attributeNames = {};
     this._option = option || {};
+    const fieldName = this._option.field_name || 'ref-label';
 
     for (const name in refs) {
       if (!refs.hasOwnProperty(name)) {
@@ -128,12 +130,29 @@ class ValidatorjsRiot extends Validator {
         continue;
       }
 
-      data[name] = ref.value;
+      data[name] = this._prepareData(ref.value, attributes.type);
       rules[name] = this._prepareRule(attributes);
+
+      if (attributes[fieldName]) {
+        attributeNames[name] = attributes[fieldName].nodeValue;
+      }
     }
 
     v.input = data;
     v.rules = super._parseRules(rules);
+    v.setAttributeNames(attributeNames);
+  }
+
+  _prepareData(value, type) {
+    if (!value) {
+      return value;
+    }
+
+    if (type && type.nodeValue == "number") {
+      return parseFloat(value);
+    }
+
+    return value;
   }
 
   _prepareRule(attributes) {
@@ -175,6 +194,10 @@ class ValidatorjsRiot extends Validator {
     }
 
     return true;
+  }
+
+  static useLang(lang) {
+    Validator.useLang(lang);
   }
 
 }
