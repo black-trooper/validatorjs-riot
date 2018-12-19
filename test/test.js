@@ -29,7 +29,7 @@ describe('test', function () {
       <input type="text" ref="field1" required />
       <input type="number" ref="field2" max="3" value="10" />
       <input type="number" ref="field3" min="3" value="2" />
-      <input type="text" ref="field4" pattern="regex:/^(?!0\\.00)\\d{1,3}(,\\d{3})*(\\.\\d\\d)?$/" value="10,000.001" />
+      <input type="text" ref="field4" pattern="/^[0-9]?$/" value="11" />
       `)
     const v = new Validator(tag.refs)
     v.fails().should.equal(true)
@@ -45,7 +45,7 @@ describe('test', function () {
       <input type="text" ref="field1" required />
       <input type="number" ref="field2" max="3" value="10" />
       <input type="number" ref="field3" min="3" value="2" />
-      <input type="text" ref="field4" pattern="regex:/^(?!0\\.00)\\d{1,3}(,\\d{3})*(\\.\\d\\d)?$/" value="10,000.001" />
+      <input type="text" ref="field4" pattern="/^[0-9]?$/" value="11" />
       `)
     const v = new Validator(tag.refs, { target: ['field1'] })
     v.fails().should.equal(true)
@@ -61,7 +61,7 @@ describe('test', function () {
       <input type="text" ref="field1" required />
       <input type="number" ref="field2" max="3" value="10" />
       <input type="number" ref="field3" min="3" value="2" />
-      <input type="text" ref="field4" pattern="regex:/^(?!0\\.00)\\d{1,3}(,\\d{3})*(\\.\\d\\d)?$/" value="10,000.001" />
+      <input type="text" ref="field4" pattern="/^[0-9]?$/" value="11" />
       `)
     const v = new Validator(tag.refs, { expect: ['field1'] })
     v.fails().should.equal(true)
@@ -77,7 +77,7 @@ describe('test', function () {
       <input type="text" ref="field1" validate="required" />
       <input type="number" ref="field2" validate="max:3" value="10" />
       <input type="number" ref="field3" validate="min:3" value="2" />
-      <input type="text" ref="field4" pattern="regex:/^(?!0\\.00)\\d{1,3}(,\\d{3})*(\\.\\d\\d)?$/" value="10,000.001" />
+      <input type="text" ref="field4" validate="regex:/^[0-9]?$/" value="11" />
       `)
     const v = new Validator(tag.refs)
     v.fails().should.equal(true)
@@ -93,7 +93,7 @@ describe('test', function () {
       <input type="text" ref="field1" required />
       <input type="number" ref="field2" max="3" value="10" />
       <input type="number" ref="field3" min="3" value="2" />
-      <input type="text" ref="field4" pattern="regex:/^(?!0\\.00)\\d{1,3}(,\\d{3})*(\\.\\d\\d)?$/" value="10,000.001" />
+      <input type="text" ref="field4" pattern="/^[0-9]?$/" value="11" />
       `)
     Validator.useLang('ja')
     const v = new Validator(tag.refs)
@@ -110,7 +110,7 @@ describe('test', function () {
       <input type="text" ref="field1" ref-label="フィールド1" required />
       <input type="number" ref="field2" max="3" value="10" />
       <input type="number" ref="field3" min="3" value="2" />
-      <input type="text" ref="field4" pattern="regex:/^(?!0\\.00)\\d{1,3}(,\\d{3})*(\\.\\d\\d)?$/" value="10,000.001" />
+      <input type="text" ref="field4" pattern="/^[0-9]?$/" value="11" />
       `)
     Validator.useLang('ja')
     const v = new Validator(tag.refs)
@@ -127,7 +127,7 @@ describe('test', function () {
       <input type="text" ref="field1" hoge="フィールド1" required />
       <input type="number" ref="field2" max="3" value="10" />
       <input type="number" ref="field3" min="3" value="2" />
-      <input type="text" ref="field4" pattern="regex:/^(?!0\\.00)\\d{1,3}(,\\d{3})*(\\.\\d\\d)?$/" value="10,000.001" />
+      <input type="text" ref="field4" pattern="/^[0-9]?$/" value="11" />
       `)
     Validator.useLang('ja')
     const v = new Validator(tag.refs, { field_name: 'hoge' })
@@ -144,7 +144,7 @@ describe('test', function () {
       <input type="text" ref="field1" ref-label="フィールド1" required />
       <input type="number" ref="field2" max="3" value="10" />
       <input type="number" ref="field3" min="3" value="2" />
-      <input type="text" ref="field4" pattern="regex:/^(?!0\\.00)\\d{1,3}(,\\d{3})*(\\.\\d\\d)?$/" value="10,000.001" />
+      <input type="text" ref="field4" pattern="/^[0-9]?$/" value="11" />
       `)
     Validator.useLang('ja')
     const v = new Validator(tag.refs)
@@ -155,5 +155,6 @@ describe('test', function () {
     v.errors.first('field2').should.equal('フィールド2は3以下で入力してください。')
     v.errors.first('field3').should.equal('field3は3以上で入力してください。')
     v.errors.first('field4').should.equal('field4の値はパターンにマッチする必要があります。')
+    console.log(v.rules.field4)
   })
 })
