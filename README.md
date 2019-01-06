@@ -30,55 +30,42 @@ let Validator = require('validatorjs-riot');
 
 ### Basic Usage
 
-```js
-let validation = new Validator(refs, [options]);
-```
-
-__refs__ {Object} - Riot refs
-
-__options__ {Object} - Optional
-
-#### Example 1 - Passing Validation
-
-```html
-<input type="text" ref="name" validate="required" value="John" />
-<input type="text" ref="email" validate="required|email" value="johndoe@gmail.com" />
-<input type="number" ref="age" validate="min:18" value="28" />
-<button type="button" onclick="{ validate }">validate</button>
-
-<script>
-let Validator = require('validatorjs-riot');
-let validation = new Validator(this.refs);
-
-validate(e) {
-  validation.passes(); // true
-  validation.fails(); // false
-}
-</script>
-```
-
 To apply validation rules, set _ref_ and _validate_ attributes.
 
-#### Example 2 - Failing Validation
-
 ```html
-<input type="text" ref="name" validate="size:3" value="D" />
+<input type="text" ref="name" validate="required" value="" />
 <input type="text" ref="email" validate="required|email" value="not an email address.com" />
-<button type="button" onclick="{ validate }">validate</button>
+
+<button type="button" onclick="{ register }">register</button>
 
 <script>
 let Validator = require('validatorjs-riot');
-let validation = new Validator(this.refs);
 
-validate(e) {
-  validation.fails(); // true
-  validation.passes(); // false
+this.register = function() {
+  let validation = new Validator(this.refs);
 
-  // Error messages
-  validation.errors.first('email'); // 'The email format is invalid.'
-  validation.errors.get('email'); // returns an array of all email error messages
+  console.log(validation.fails()); // true
+  console.log(validation.passes()); // false
+  console.log(validation.errors.first('name')); // 'The name format is invalid.'
+  console.log(validation.errors.get('name')); // returns an array of all name error messages
+
+  if (validation.fails()) {
+    this.errors = validation.errors.all()
+    return
+  }
+  // ...
 }
 </script>
+```
+
+To add a class to error fields or to display error messages
+
+```html
+<input type="text" ref="name" validate="required" class="{ has-error : errors.name }" value="" />
+<span if="{ errors.name }" each="{ error in errors.name }">{ error }</span>
+<input type="text" ref="email" validate="required|email" class="{ has-error : errors.name }"
+  value="not an email address.com" />
+<span if="{ errors.email }" each="{ error in errors.email }">{ error }</span>
 ```
 
 ### Available Rules
@@ -227,7 +214,7 @@ The field under validation must match the given regular expression.
 **Note**: When using the ``regex`` pattern, it may be necessary to specify rules in pattern attribute instead of using pipe delimiters, especially if the regular expression contains a pipe character.
 For each backward slash that you used in your regex pattern, you must escape each one with another backward slash.
 
-#### Example 3 - Regex validation
+#### Example - Regex validation
 
 ```html
 <input type="text" ref="name" validate="required|size:3" value="Doe" />
@@ -239,33 +226,27 @@ For each backward slash that you used in your regex pattern, you must escape eac
 
 This constructor will automatically generate error messages for validation rules that failed.
 
-If there are errors, the Validator instance will have its __errors__ property object populated with the error messages for all failing attributes. The methods and properties on the __errors__ property object are:
+If there are errors, the Validator instance will have its __errors__ property object populated with the error messages for all failing fields. The methods and properties on the __errors__ property object are:
 
-#### .first(attribute)
+#### .first(refName)
 
-returns the first error message for an attribute, false otherwise
+returns the first error message for a field, false otherwise
 
-#### .get(attribute)
+#### .get(refName)
 
-returns an array of error messages for an attribute, or an empty array if there are no errors
+returns an array of error messages for a field, or an empty array if there are no errors
 
 #### .all()
 
-returns an object containing all error messages for all failing attributes
+returns an object containing all error messages for all failing fields
 
-#### .has(attribute)
+#### .has(refName)
 
-returns true if error messages exist for an attribute, false otherwise
+returns true if error messages exist for a field, false otherwise
 
 #### .errorCount
 
 the number of validation errors
-
-```js
-let validation = new Validator(this.refs);
-validation.errors.first('email'); // returns first error message for email attribute
-validator.errors.get('email'); // returns an array of error messages for the email attribute
-```
 
 ### Target refs
 
@@ -287,24 +268,10 @@ validation.errors.first('email'); // false
 validation.errors.get('email'); // []
 ```
 
-### Expect refs
-
-```html
-<input type="text" ref="name" validate="required" value="" />
-<input type="text" ref="email" validate="required|email" value="not an email address.com" />
-```
+### Except refs
 
 ```js
-let validation = new Validator(this.refs, { expect: ['name'] });
-
-validation.fails(); // true
-validation.passes(); // false
-
-// Error messages
-validation.errors.first('name'); // false
-validation.errors.get('name'); // []
-validation.errors.first('email'); // 'The email format is invalid.'
-validation.errors.get('email'); // returns an array of all email error messages
+let validation = new Validator(this.refs, { except: ['name'] });
 ```
 
 ### Custom Attribute Names
