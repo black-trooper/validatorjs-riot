@@ -7,7 +7,7 @@
 		exports["ValidatorjsRiot"] = factory(require("validatorjs"));
 	else
 		root["ValidatorjsRiot"] = factory(root["validatorjs"]);
-})(window, function(__WEBPACK_EXTERNAL_MODULE_validatorjs__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_validatorjs__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
