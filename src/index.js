@@ -7,8 +7,10 @@ class ValidatorjsRiot extends Validator {
     const data = {}
     const rules = {}
     const attributeNames = {}
+    const customMessages = {}
     this._option = option || {}
     const fieldName = this._option.field_name || 'ref-label'
+    const customMessageAttributeName = this._option.custom_message_attribute_name || 'custom-message'
 
     for (const name in refs) {
       if (!refs.hasOwnProperty(name)) {
@@ -27,9 +29,26 @@ class ValidatorjsRiot extends Validator {
       if (attributes[fieldName]) {
         attributeNames[name] = attributes[fieldName].nodeValue
       }
+      if (attributes[customMessageAttributeName]) {
+        const value = attributes[customMessageAttributeName].nodeValue
+        try {
+          const obj = JSON.parse(value)
+          Object.keys(obj).forEach(key => {
+            customMessages[`${key}.${name}`] = obj[key]
+          })
+        } catch (e) {
+          if (value.indexOf(':') > 0) {
+            const array = value.split(':')
+            customMessages[`${array[0]}.${name}`] = array[1]
+          } else {
+            customMessages[`regex.${name}`] = value
+          }
+        }
+      }
     }
     v.input = data
     v.rules = super._parseRules(rules)
+    v.messages._setCustom(customMessages);
     v.setAttributeNames(attributeNames)
   }
 
