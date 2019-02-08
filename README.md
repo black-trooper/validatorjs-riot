@@ -218,8 +218,8 @@ For each backward slash that you used in your regex pattern, you must escape eac
 
 ```html
 <input type="text" ref="name" validate="required|size:3" value="Doe" />
-<input type="text" ref="salary" validate="required" pattern="regex:/^(?!0.00)\\d\\{1,3\\}(,\\d\\{3\\})*(.\\d\\d)?$/" value="10,000.00" />
-<input type="text" ref="salary" validate="required" pattern="regex:/^(19|20)[\\d]\\{2,2\\}$/" value="1980" />
+<input type="text" ref="salary" validate="required" pattern="/^(?!0.00)\d\{1,3\}(,\d\{3\})*(.\d\d)?$/" value="10,000.00" />
+<input type="text" ref="salary" validate="required" pattern="/^(19|20)[\d]\{2,2\}$/" value="1980" />
 ```
 
 ### Error Messages
@@ -322,6 +322,24 @@ if (validator.fails()) {
 ```
 
 Note: by default all _ characters will be replaced with spaces.
+
+### Custom message
+
+To display a custom "friendly" error messages, set `custom-message`
+
+```html
+<input type="text" ref="year" pattern="/^(19|20)[\d]\{2,2\}$/" custom-message="The year format is 19xx or 20xx" value="" />
+<input type="text" ref="year" pattern="/^(19|20)[\d]\{2,2\}$/" custom-message="regex:The year format is 19xx or 20xx" value="" />
+<input type="text" ref="year" pattern="/^(19|20)[\d]\{2,2\}$/" custom-message='\{"required":"Required!", "regex":"The year format is 19xx or 20xx"\}' value="" />
+<input type="text" ref="year" pattern="/^(19|20)[\d]\{2,2\}$/" custom-message="\{&quot;required&quot;:&quot;Required!&quot;, &quot;regex&quot;:&quot;The year format is 19xx or 20xx&quot;\}" value="" />
+```
+
+```js
+let validator = new Validator(this.refs);
+if (validator.fails()) {
+  validator.errors.first('year'); // "The year format is 19xx or 20xx"
+}
+```
 
 ### Language Support
 
