@@ -155,6 +155,27 @@ describe('test', function () {
     v.errors.first('field2').should.equal('フィールド2は3以下で入力してください。')
     v.errors.first('field3').should.equal('field3は3以上で入力してください。')
     v.errors.first('field4').should.equal('field4の値はパターンにマッチする必要があります。')
-    console.log(v.rules.field4)
+  })
+
+
+  it('custom-message', () => {
+    mount(`
+      <input type="text" ref="field1" custom-message="required:入力してください" required />
+      <input type="number" ref="field2" max="3" value="10" custom-message="required:入力してください" />
+      <input type="number" ref="field3" min="3" value="2" custom-message="入力してください"  />
+      <input type="text" ref="field4" pattern="/^[0-9]?$/" custom-message="0から9までの数字を入力してください" value="11" />
+      <input type="text" ref="field5" required pattern="/^[0-9]?$/" custom-message='\\{"required":"入力してください", "regex":"0から9までの数字を入力してください"\\}' />
+      <input type="text" ref="field6" required pattern="/^[0-9]?$/" custom-message="\\{&quot;required&quot;:&quot;入力してください&quot;, &quot;regex&quot;:&quot;0から9までの数字を入力してください&quot;\\}" value="11" />
+      `)
+    Validator.useLang('ja')
+    const v = new Validator(tag.refs)
+    v.fails().should.equal(true)
+    v.passes().should.equal(false)
+    v.errors.first('field1').should.equal('入力してください')
+    v.errors.first('field2').should.equal('field2は3以下で入力してください。')
+    v.errors.first('field3').should.equal('field3は3以上で入力してください。')
+    v.errors.first('field4').should.equal('0から9までの数字を入力してください')
+    v.errors.first('field5').should.equal('入力してください')
+    v.errors.first('field6').should.equal('0から9までの数字を入力してください')
   })
 })
