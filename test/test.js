@@ -5,7 +5,8 @@ describe('test', function () {
 
   const mount = target => {
     riot.tag('test', target)
-    $('body').append('<test></test>')
+    const div = document.createElement('test')
+    document.body.appendChild(div)
     tag = riot.mount('test')[0]
   }
 
