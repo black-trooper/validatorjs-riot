@@ -1,0 +1,7 @@
+<regex-test>
+    <input type="text" ref="field1" validate="regex:/^(?!0.00)\d\{1,3}(,\d\{3})*(.\d\d)?$/" value="200.0" />
+    <input type="text" ref="field2" validate="regex:/^(?!0.00)\d\{1,3}(,\d\{3})*(.\d\d)?$/" value="12,500.00" />
+    <input type="text" ref="field3" pattern="/^(?!0.00)\d\{1,3}(,\d\{3})*(.\d\d)?$/" value="200.0" />
+    <input type="text" ref="field4" pattern="/^(?!0.00)\d\{1,3}(,\d\{3})*(.\d\d)?$/" value="12,500.00" />
+    <input type="text" ref="field5" pattern="/^(19|20)\d\{2}$/" value="1980" />
+</regex-test>

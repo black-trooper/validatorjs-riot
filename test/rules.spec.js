@@ -1,26 +1,28 @@
-const Validator = require('../src/index')
+import Validator from '../src/index'
+import AppTest from './tag/test.riot'
+import { expect } from 'chai'
+import { component } from 'riot'
 
 describe('rules', function () {
   let tag
 
   const mount = target => {
-    riot.tag('test', target)
-    const div = document.createElement('test')
-    document.body.appendChild(div)
-    tag = riot.mount('test')[0]
+    const div = document.createElement('div')
+    div.insertAdjacentHTML('beforeend', target)
+    tag = component(AppTest)(div)
   }
 
   const passes = target => {
     mount(target)
-    const v = new Validator(tag.refs)
-    v.fails().should.equal(false)
-    v.passes().should.equal(true)
+    const v = new Validator(tag.$$('[ref]'))
+    expect(v.fails()).equal(false)
+    expect(v.passes()).equal(true)
   }
   const fails = target => {
     mount(target)
-    const v = new Validator(tag.refs)
-    v.fails().should.equal(true)
-    v.passes().should.equal(false)
+    const v = new Validator(tag.$$('[ref]'))
+    expect(v.fails()).equal(true)
+    expect(v.passes()).equal(false)
   }
 
   afterEach(function () {
@@ -298,12 +300,5 @@ describe('rules', function () {
   it('url', () => {
     fails('<input type="text" ref="field" validate="url" value="http://" />')
     passes('<input type="text" ref="field" validate="url" value="https://google.com" />')
-  })
-
-  it('regex', () => {
-    fails('<input type="text" ref="field" validate="regex:/^(?!0.00)\\d\\{1,3\\}(,\\d\\{3\\})*(.\\d\\d)?$/" value="200.0" />')
-    passes('<input type="text" ref="field" validate="regex:/^(?!0.00)\\d\\{1,3\\}(,\\d\\{3\\})*(.\\d\\d)?$/" value="12,500.00" />')
-    fails('<input type="text" ref="field" pattern="/^(?!0.00)\\d\\{1,3\\}(,\\d\\{3\\})*(.\\d\\d)?$/" value="200.0" />')
-    passes('<input type="text" ref="field" pattern="/^(?!0.00)\\d\\{1,3\\}(,\\d\\{3\\})*(.\\d\\d)?$/" value="12,500.00" />')
   })
 })

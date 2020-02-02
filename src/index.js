@@ -9,22 +9,24 @@ class ValidatorjsRiot extends Validator {
     const attributeNames = {}
     const customMessages = {}
     this._option = option || {}
+    const keyName = this._option.key_name || 'ref'
     const fieldName = this._option.field_name || 'ref-label'
     const customMessageAttributeName = this._option.custom_message_attribute_name || 'custom-message'
 
-    for (const name in refs) {
-      if (!refs.hasOwnProperty(name)) {
-        continue
-      }
-      const ref = refs[name]
+    for (const id in refs) {
+      const ref = refs[id]
       let attributes = ref.attributes
       if (!attributes && ref.root) {
         attributes = ref.root.attributes
       }
+      if (!attributes[keyName]) {
+        continue
+      }
+      const name = attributes[keyName].nodeValue
       if (!this._isTarget(name)) {
         continue
       }
-      data[name] = this._prepareData(ref.value, attributes.type)
+      data[name] = this._prepareData(ref, attributes.type)
       rules[name] = this._prepareRule(attributes)
       if (attributes[fieldName]) {
         attributeNames[name] = attributes[fieldName].nodeValue
@@ -48,15 +50,20 @@ class ValidatorjsRiot extends Validator {
     }
     v.input = data
     v.rules = super._parseRules(rules)
-    v.messages._setCustom(customMessages);
+    v.messages._setCustom(customMessages)
     v.setAttributeNames(attributeNames)
   }
 
-  _prepareData(value, type) {
+  _prepareData(target, type) {
+    if (type && type.nodeValue == 'checkbox') {
+      return target.checked ? target.value : null
+    }
+    const value = target.value || (target.getAttribute && target.getAttribute('value'))
+
     if (!value) {
       return value
     }
-    if (type && type.nodeValue == "number") {
+    if (type && type.nodeValue == 'number') {
       return parseFloat(value)
     }
     return value
@@ -87,13 +94,13 @@ class ValidatorjsRiot extends Validator {
     return rule
   }
 
-  _isTarget(ref) {
+  _isTarget(name) {
     const target = this._option.target || []
     const except = this._option.except || []
-    if (target.length > 0 && target.indexOf(ref) < 0) {
+    if (target.length > 0 && target.indexOf(name) < 0) {
       return false
     }
-    if (except.length > 0 && except.indexOf(ref) >= 0) {
+    if (except.length > 0 && except.indexOf(name) >= 0) {
       return false
     }
     return true

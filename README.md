@@ -42,7 +42,10 @@ To apply validation rules, set _ref_ and _validate_ attributes.
 let Validator = require('validatorjs-riot');
 
 this.register = function() {
+  // Riot v3
   let validation = new Validator(this.refs);
+  // Riot v4
+  let validation = new Validator(this.$$('[ref]'))
 
   console.log(validation.fails()); // true
   console.log(validation.passes()); // false
@@ -256,7 +259,10 @@ the number of validation errors
 ```
 
 ```js
+// Riot v3
 let validation = new Validator(this.refs, { target: ['name'] });
+// Riot v4
+let validation = new Validator(this.$$('[ref]'), { target: ['name'] });
 
 validation.fails(); // true
 validation.passes(); // false
@@ -271,7 +277,10 @@ validation.errors.get('email'); // []
 ### Except refs
 
 ```js
+// Riot v3
 let validation = new Validator(this.refs, { except: ['name'] });
+// Riot v4
+let validation = new Validator(this.$$('[ref]'), { except: ['name'] });
 ```
 
 ### Custom Attribute Names
@@ -283,7 +292,10 @@ To display a custom "friendly" attribute name in error messages, set `ref-label`
 ```
 
 ```js
+// Riot v3
 let validator = new Validator(this.refs);
+// Riot v4
+let validator = new Validator(this.$$('[ref]'));
 if (validator.fails()) {
   validator.errors.first('name'); // "The custom_name field is required."
 }
@@ -294,7 +306,10 @@ or
 ```
 
 ```js
+// Riot v3
 let validator = new Validator(this.refs);
+// Riot v4
+let validator = new Validator(this.$$('[ref]'));
 validator.setAttributeNames({ name: 'custom_name' });
 if (validator.fails()) {
   validator.errors.first('name'); // "The custom_name field is required."
@@ -312,7 +327,10 @@ Validator.setAttributeFormatter(function(attribute) {
 });
 
 // Or configure formatter for particular instance.
+// Riot v3
 let validator = new Validator(this.refs);
+// Riot v4
+let validator = new Validator(this.$$('[ref]'));
 validator.setAttributeFormatter(function(attribute) {
   return attribute.replace(/_/g, ' ');
 });
@@ -335,7 +353,10 @@ To display a custom "friendly" error messages, set `custom-message`
 ```
 
 ```js
+// Riot v3
 let validator = new Validator(this.refs);
+// Riot v4
+let validator = new Validator(this.$$('[ref]'));
 if (validator.fails()) {
   validator.errors.first('year'); // "The year format is 19xx or 20xx"
 }

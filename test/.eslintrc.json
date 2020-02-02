@@ -1,12 +1,8 @@
 {
   "globals": {
-    "riot": true,
     "describe": true,
     "beforeEach": true,
     "afterEach": true,
-    "$": true,
-    "it": true,
-    "expect": true,
-    "should": true
+    "it": true
   }
 }

@@ -144,26 +144,29 @@ function (_Validator) {
     var attributeNames = {};
     var customMessages = {};
     _this._option = option || {};
+    var keyName = _this._option.key_name || 'ref';
     var fieldName = _this._option.field_name || 'ref-label';
     var customMessageAttributeName = _this._option.custom_message_attribute_name || 'custom-message';
 
-    var _loop = function _loop(name) {
-      if (!refs.hasOwnProperty(name)) {
-        return "continue";
-      }
-
-      var ref = refs[name];
+    var _loop = function _loop(id) {
+      var ref = refs[id];
       var attributes = ref.attributes;
 
       if (!attributes && ref.root) {
         attributes = ref.root.attributes;
       }
 
+      if (!attributes[keyName]) {
+        return "continue";
+      }
+
+      var name = attributes[keyName].nodeValue;
+
       if (!_this._isTarget(name)) {
         return "continue";
       }
 
-      data[name] = _this._prepareData(ref.value, attributes.type);
+      data[name] = _this._prepareData(ref, attributes.type);
       rules[name] = _this._prepareRule(attributes);
 
       if (attributes[fieldName]) {
@@ -189,8 +192,8 @@ function (_Validator) {
       }
     };
 
-    for (var name in refs) {
-      var _ret = _loop(name);
+    for (var id in refs) {
+      var _ret = _loop(id);
 
       if (_ret === "continue") continue;
     }
@@ -206,12 +209,18 @@ function (_Validator) {
 
   _createClass(ValidatorjsRiot, [{
     key: "_prepareData",
-    value: function _prepareData(value, type) {
+    value: function _prepareData(target, type) {
+      if (type && type.nodeValue == 'checkbox') {
+        return target.checked ? target.value : null;
+      }
+
+      var value = target.value || target.getAttribute && target.getAttribute('value');
+
       if (!value) {
         return value;
       }
 
-      if (type && type.nodeValue == "number") {
+      if (type && type.nodeValue == 'number') {
         return parseFloat(value);
       }
 
@@ -252,15 +261,15 @@ function (_Validator) {
     }
   }, {
     key: "_isTarget",
-    value: function _isTarget(ref) {
+    value: function _isTarget(name) {
       var target = this._option.target || [];
       var except = this._option.except || [];
 
-      if (target.length > 0 && target.indexOf(ref) < 0) {
+      if (target.length > 0 && target.indexOf(name) < 0) {
         return false;
       }
 
-      if (except.length > 0 && except.indexOf(ref) >= 0) {
+      if (except.length > 0 && except.indexOf(name) >= 0) {
         return false;
       }
 
