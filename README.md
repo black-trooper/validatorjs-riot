@@ -49,8 +49,9 @@ this.register = function() {
 
   console.log(validation.fails()); // true
   console.log(validation.passes()); // false
-  console.log(validation.errors.first('name')); // 'The name format is invalid.'
+  console.log(validation.errors.first('name')); // 'The name field is required.'
   console.log(validation.errors.get('name')); // returns an array of all name error messages
+  console.log(validation.errors.first('email')); // 'The email format is invalid.'
 
   if (validation.fails()) {
     this.errors = validation.errors.all()
@@ -69,6 +70,40 @@ To add a class to error fields or to display error messages
 <input type="text" ref="email" validate="required|email" class="{ has-error : errors.name }"
   value="not an email address.com" />
 <span if="{ errors.email }" each="{ error in errors.email }">{ error }</span>
+```
+
+### For Riot v4
+
+validatorjs-riot handles the `ref` attribute as a field name.
+The `ref` attribute has been removed in Riot v4, but it can still be used.
+
+If you want to use another attribute instead of the `ref` attribute, use the　`key_name` option.
+
+```html
+<input type="text" field="name" validate="required" value="" />
+<input type="text" field="email" validate="required|email" value="not an email address.com" />
+
+<button type="button" onclick="{ register }">register</button>
+
+<script>
+let Validator = require('validatorjs-riot');
+
+this.register = function() {
+  let validation = new Validator(this.$$('[field]'), { key_name: 'field' });
+
+  console.log(validation.fails()); // true
+  console.log(validation.passes()); // false
+  console.log(validation.errors.first('name')); // 'The name field is required.'
+  console.log(validation.errors.get('name')); // returns an array of all name error messages
+  console.log(validation.errors.first('email')); // 'The email format is invalid.'
+
+  if (validation.fails()) {
+    this.errors = validation.errors.all()
+    return
+  }
+  // ...
+}
+</script>
 ```
 
 ### Available Rules
